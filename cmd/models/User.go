@@ -5,7 +5,7 @@ type User struct {
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
 	Password string `json:"password"`
-	Type	 string `json:"type"`
+	Type     string `json:"type"`
 }
 
 type UserRegister struct {
@@ -18,4 +18,17 @@ type UserRegister struct {
 type UserLogin struct {
 	Email    string `json:"email" validate:"required email"`
 	Password string `json:"password" validate:"required string"`
+}
+
+type LoginResponse struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Phone string `json:"phone"`
+	Type  string `json:"type"`
+}
+
+type UserToken struct {
+	Email string `json:"email"`
+	Type  string `json:"type"`
+	Token string `json:"token"`
 }

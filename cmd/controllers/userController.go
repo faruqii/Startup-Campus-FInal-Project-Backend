@@ -10,7 +10,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
-	validate "gopkg.in/go-playground/validator.v9"
 )
 
 func UserToken() string {
@@ -31,20 +30,12 @@ func SignUp(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(err.Error())
 	}
 
-	validate := validate.New()
-
-	if err := validate.Struct(req); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"message": "Invalid request",
-		})
-	}
-
 	user := models.User{
 		Name:     req.Name,
 		Email:    req.Email,
 		Phone:    req.Phone,
 		Password: string(pass),
-		Type:	 "buyer",
+		Type:     "buyer",
 	}
 
 	err = database.DB.Create(&user).Error
@@ -91,15 +82,38 @@ func SignIn(c *fiber.Ctx) error {
 	})
 
 	token, err := claims.SignedString([]byte(UserToken()))
+
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Internal server error",
 		})
 	}
 
+	userToken := models.UserToken{
+		Email: user.Email,
+		Type: user.Type,
+		Token: token,
+	}
+
+	err = database.DB.Create(&userToken).Error
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(err.Error())
+	}
+
+
+	resp := models.LoginResponse{
+		Name: user.Name,
+		Email: user.Email,
+		Phone: user.Phone,
+		Type: user.Type,
+	}
+
+
+
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"message": "Success login",
-		"user":    user,
+		"user":    resp,
 		"token":   token,
 	})
 }

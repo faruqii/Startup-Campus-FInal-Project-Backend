@@ -33,7 +33,10 @@ func Connect(c *Config) {
 
 	DB = conn
 
-	err = conn.AutoMigrate(&models.User{})
+	err = conn.AutoMigrate(
+		&models.User{},
+		&models.UserToken{},
+	)
 
 	if err != nil {
 		log.Fatal(err)
