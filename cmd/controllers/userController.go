@@ -13,7 +13,7 @@ import (
 )
 
 func UserToken() string {
-	return os.Getenv("USER_TOKEN")
+	return os.Getenv("USER_TOKEN_SECRET")
 }
 
 func SignUp(c *fiber.Ctx) error {
@@ -48,7 +48,40 @@ func SignUp(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(fiber.Map{
 		"message": "User created",
 	})
+}
 
+func SignUpBuyer(c *fiber.Ctx) error {
+	req := models.UserRegister{}
+
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request",
+		})
+	}
+
+	pass, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(err.Error())
+	}
+
+	user := models.User{
+		Name:     req.Name,
+		Email:    req.Email,
+		Phone:    req.Phone,
+		Password: string(pass),
+		Type:     "seller",
+	}
+
+	err = database.DB.Create(&user).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Internal server error",
+		})
+	}
+
+	return c.Status(http.StatusCreated).JSON(fiber.Map{
+		"message": "User created",
+	})
 }
 
 func SignIn(c *fiber.Ctx) error {
@@ -90,9 +123,9 @@ func SignIn(c *fiber.Ctx) error {
 	}
 
 	userToken := models.UserToken{
-		Email: user.Email,
-		Type: user.Type,
-		Token: token,
+		UserID: user.ID,
+		Type:   user.Type,
+		Token:  token,
 	}
 
 	err = database.DB.Create(&userToken).Error
@@ -101,15 +134,12 @@ func SignIn(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(err.Error())
 	}
 
-
 	resp := models.LoginResponse{
-		Name: user.Name,
+		Name:  user.Name,
 		Email: user.Email,
 		Phone: user.Phone,
-		Type: user.Type,
+		Type:  user.Type,
 	}
-
-
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"message": "Success login",
