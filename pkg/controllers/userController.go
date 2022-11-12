@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/faruqii/Startup-Campus-Final-Project-Backend/cmd/database"
-	"github.com/faruqii/Startup-Campus-Final-Project-Backend/cmd/models"
+	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/database"
+	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"

@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/faruqii/Startup-Campus-Final-Project-Backend/cmd/controllers"
-	"github.com/faruqii/Startup-Campus-Final-Project-Backend/cmd/middleware"
+	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/controllers"
+	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/middleware"
 	"github.com/gofiber/fiber/v2"
 )
 

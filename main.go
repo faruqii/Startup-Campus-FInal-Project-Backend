@@ -3,10 +3,9 @@ package main
 import (
 	"log"
 	"os"
-	"regexp"
 
-	"github.com/faruqii/Startup-Campus-Final-Project-Backend/cmd/database"
-	"github.com/faruqii/Startup-Campus-Final-Project-Backend/cmd/routes"
+	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/database"
+	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
@@ -14,12 +13,12 @@ import (
 
 func main() {
 	// Load .env file from root directory
-	projectDirName := "Startup-Campus-Final-Project-Backend"
-	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
-	currDir, _ := os.Getwd()
-	rootDir := projectName.FindString(currDir)
+	// projectDirName := "Startup-Campus-Final-Project-Backend"
+	// projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
+	// currDir, _ := os.Getwd()
+	// rootDir := projectName.FindString(currDir)
 
-	err := godotenv.Load(string(rootDir) + "/.env")
+	err := godotenv.Load(".env")
 
 	if err != nil {
 		log.Fatal("Error loading .env file")

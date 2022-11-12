@@ -3,8 +3,8 @@ package middleware
 import (
 	"log"
 
-	"github.com/faruqii/Startup-Campus-Final-Project-Backend/cmd/database"
-	"github.com/faruqii/Startup-Campus-Final-Project-Backend/cmd/models"
+	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/database"
+	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/models"
 	"github.com/gofiber/fiber/v2"
 )
 
