@@ -27,7 +27,18 @@ func Setup(app *fiber.App) {
 		},
 	}))
 	product.Post("/create", controllers.CreateProduct)
-	product.Get("/get", controllers.GetProduct)
+	product.Get("/products/:id", controllers.GetProductDetails)
+	product.Get("/products", controllers.GetProductList)
 
+	// category endpoints can be accessed by seller
+	category := seller.Group("/category").Use(middleware.New(middleware.Config{
+		Unauthorized: func(c *fiber.Ctx) error {
+			return c.Status(401).JSON(fiber.Map{
+				"message": "Unauthorized",
+			})
+		},
+	}))
+	category.Post("/create", controllers.CreateCategory)
+	category.Get("/categories", controllers.GetCategories)
 
 }

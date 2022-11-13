@@ -37,6 +37,7 @@ func Connect(c *Config) {
 		&models.User{},
 		&models.UserToken{},
 		&models.Product{},
+		&models.Category{},
 	)
 
 	if err != nil {
