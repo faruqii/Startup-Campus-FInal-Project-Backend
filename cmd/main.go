@@ -12,13 +12,8 @@ import (
 )
 
 func main() {
-	// Load .env file from root directory
-	// projectDirName := "Startup-Campus-Final-Project-Backend"
-	// projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
-	// currDir, _ := os.Getwd()
-	// rootDir := projectName.FindString(currDir)
-
-	err := godotenv.Load(".env")
+	// Load .env file
+	err := godotenv.Load()
 
 	if err != nil {
 		log.Fatal("Error loading .env file")
