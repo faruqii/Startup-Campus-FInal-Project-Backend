@@ -147,3 +147,52 @@ func SignIn(c *fiber.Ctx) error {
 		"token":   token,
 	})
 }
+
+func SignOut(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+
+	err := database.DB.Where("user_id = ?", user.ID).Delete(&models.UserToken{}).Error
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(err.Error())
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Success logout",
+	})
+}
+
+// User Topup Balance
+func TopupBalance(c *fiber.Ctx) error {
+	req := models.UserBalanceRequest{}
+
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request",
+		})
+	}
+
+	user := c.Locals("user").(models.User)
+
+	user.Balance = user.Balance + req.Balance
+
+	err := database.DB.Save(&user).Error
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(err.Error())
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Success topup balance",
+	})
+}
+
+// User Get Balance
+func GetBalance(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.User)
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Success get balance",
+		"balance": user.Balance,
+	})
+}

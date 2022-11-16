@@ -48,4 +48,3 @@ func GetCategories(c *fiber.Ctx) error {
 		"data":    categories,
 	})
 }
-

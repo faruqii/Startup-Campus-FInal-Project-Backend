@@ -8,8 +8,10 @@ import (
 	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/database"
 	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/models"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/datatypes"
 )
 
+// CreateProduct creates a new product
 func CreateProduct(c *fiber.Ctx) error {
 	req := models.ProductRequest{}
 
@@ -20,13 +22,13 @@ func CreateProduct(c *fiber.Ctx) error {
 	}
 
 	product := models.Product{
-		Name:         req.Name,
-		Sizes:        req.Sizes,
-		Details:      req.Details,
-		Price:        req.Price,
-		ImageURL:     req.ImageURL,
-		Condition:    req.Condition,
-		CategoryID:   req.CategoryID,
+		Name:       req.Name,
+		Sizes:      datatypes.JSON([]byte(`["S", "M", "L"]`)),
+		Details:    req.Details,
+		Price:      req.Price,
+		ImageURL:   req.ImageURL,
+		Condition:  req.Condition,
+		CategoryID: req.CategoryID,
 	}
 
 	err := database.DB.Create(&product).Error
@@ -45,11 +47,11 @@ func CreateProduct(c *fiber.Ctx) error {
 	}
 
 	return c.Status(http.StatusCreated).JSON(fiber.Map{
-		"message": "Product created",
-		"data":    product,
+		"message": "Product Added",
 	})
 }
 
+// GetProducts returns all products within all the details
 func GetProductDetails(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -68,6 +70,7 @@ func GetProductDetails(c *fiber.Ctx) error {
 	})
 }
 
+// GetProducts returns all products with query params
 func GetProductList(c *fiber.Ctx) error {
 	// Use query params to filter products
 	// Example: /api/product/products?category=1&size=XL
@@ -180,3 +183,63 @@ func GetProductList(c *fiber.Ctx) error {
 	})
 
 }
+
+// UpdateProduct updates a product
+func UpdateProduct(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	var product models.Product
+
+	err := database.DB.First(&product, id).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Internal server error",
+		})
+	}
+
+	req := models.ProductRequest{}
+
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request",
+		})
+	}
+
+	err = database.DB.Model(&product).Updates(req).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Internal server error",
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Product updated",
+	})
+}
+
+// DeleteProduct deletes a product
+func DeleteProduct(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	var product models.Product
+
+	err := database.DB.First(&product, id).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Internal server error",
+		})
+	}
+
+	err = database.DB.Delete(&product).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Internal server error",
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Product deleted",
+	})
+}
+
+// language-go

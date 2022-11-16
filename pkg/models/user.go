@@ -6,12 +6,13 @@ import (
 )
 
 type User struct {
-	ID       string `json:"id" gorm:"primaryKey, type:uid, default:uuid_generate_v4()"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Phone    string `json:"phone"`
-	Password string `json:"password"`
-	Type     string `json:"type"`
+	ID       string  `json:"id" gorm:"primaryKey, type:uid, default:uuid_generate_v4()"`
+	Name     string  `json:"name"`
+	Email    string  `json:"email"`
+	Phone    string  `json:"phone"`
+	Password string  `json:"password"`
+	Type     string  `json:"type"`
+	Balance  float64 `json:"balance"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
@@ -50,4 +51,24 @@ type UserToken struct {
 func (u *UserToken) BeforeCreate(tx *gorm.DB) (err error) {
 	u.ID = uuid.NewString()
 	return
+}
+
+type UserBalance struct {
+	ID     string  `json:"id" gorm:"primary_key, type:uid, default:uuid_generate_v4()"`
+	UserID string  `json:"user_id"`
+	User   User    `json:"user" gorm:"foreignKey:UserID"`
+	Balance float64 `json:"balance"`
+}
+
+func (u *UserBalance) BeforeCreate(tx *gorm.DB) (err error) {
+	u.ID = uuid.NewString()
+	return
+}
+
+type UserBalanceRequest struct {
+	Balance float64 `json:"balance" validate:"required float"`
+}
+
+type UserBalanceResponse struct {
+	Balance float64 `json:"balance"`
 }

@@ -40,7 +40,7 @@ func main() {
 	}))
 
 	routes.Setup(app)
-	err = app.Listen(":3000")
+	err = app.Listen(":" + os.Getenv("APP_PORT"))
 
 	if err != nil {
 		panic(err)
