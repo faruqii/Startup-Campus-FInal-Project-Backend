@@ -36,8 +36,12 @@ func Connect(c *Config) {
 	err = conn.AutoMigrate(
 		&models.User{},
 		&models.UserToken{},
+		&models.Type{},
+		&models.UserType{},
+		&models.UserBalance{},
 		&models.Product{},
 		&models.Category{},
+		// &models.UserCart{},
 	)
 
 	if err != nil {

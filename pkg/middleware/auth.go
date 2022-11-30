@@ -41,7 +41,7 @@ func New(config Config) fiber.Handler {
 			if _, ok := header["Seller"]; !ok {
 				return config.Unauthorized(c)
 			}
-		}  
+		}
 
 		c.Locals("user", userToken)
 		log.Println("User token is valid")

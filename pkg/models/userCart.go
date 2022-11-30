@@ -6,11 +6,11 @@ import (
 )
 
 type UserCart struct {
-	ID       string  `gorm:"type:uuid;primary_key;default:uuid_generate_v4()"`
-	ItemID   string  `json:"item_id"`
-	Product  Product `json:"product" gorm:"foreignKey:ItemID"`
-	Quantity int     `json:"quantity"`
-	Sizes    string  `json:"sizes"`
+	ID        string  `gorm:"type:uuid;primary_key;default:uuid_generate_v4()"`
+	ProductID string  `json:"item_id"`
+	Product   Product `json:"product" gorm:"foreignKey:ProductID"`
+	Quantity  int     `json:"quantity"`
+	Sizes     string  `json:"sizes"`
 }
 
 func (u *UserCart) BeforeCreate(tx *gorm.DB) (err error) {
@@ -19,7 +19,7 @@ func (u *UserCart) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type UserCartRequest struct {
-	ItemID   string `json:"item_id" validate:"required string"`
-	Quantity int    `json:"quantity" validate:"required int"`
-	Sizes    string `json:"sizes" validate:"required string"`
+	ProductID string `json:"item_id" validate:"required string"`
+	Quantity  int    `json:"quantity" validate:"required int"`
+	Sizes     string `json:"sizes" validate:"required string"`
 }

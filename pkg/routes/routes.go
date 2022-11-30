@@ -23,16 +23,11 @@ func Setup(app *fiber.App) {
 			})
 		},
 	}))
-	balance.Post("/add", controllers.TopupBalance)
-	balance.Get("/get", controllers.GetBalance)
-
-	// Seller
-	seller := api.Group("/seller")
-	seller.Post("/signup", controllers.SignUpBuyer)
-	seller.Post("/signin", controllers.SignIn)
+	balance.Post("", controllers.TopupBalance)
+	balance.Get("", controllers.GetBalance)
 
 	// product endpoints can be accessed by seller
-	product := seller.Group("/product").Use(middleware.New(middleware.Config{
+	product := api.Group("/product").Use(middleware.New(middleware.Config{
 		Unauthorized: func(c *fiber.Ctx) error {
 			return c.Status(401).JSON(fiber.Map{
 				"message": "Unauthorized",
@@ -46,7 +41,7 @@ func Setup(app *fiber.App) {
 	product.Delete("/products/:id", controllers.DeleteProduct)
 
 	// category endpoints can be accessed by seller
-	category := seller.Group("/category").Use(middleware.New(middleware.Config{
+	category := api.Group("/category").Use(middleware.New(middleware.Config{
 		Unauthorized: func(c *fiber.Ctx) error {
 			return c.Status(401).JSON(fiber.Map{
 				"message": "Unauthorized",
