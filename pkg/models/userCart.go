@@ -6,7 +6,9 @@ import (
 )
 
 type UserCart struct {
-	ID        string  `gorm:"type:uuid;primary_key;default:uuid_generate_v4()"`
+	ID        string  `json:"id" gorm:"primary_key, type:uid, default:uuid_generate_v4()"`
+	UserID    string  `json:"user_id"`
+	User      User    `json:"user" gorm:"foreignKey:UserID"`
 	ProductID string  `json:"item_id"`
 	Product   Product `json:"product" gorm:"foreignKey:ProductID"`
 	Quantity  int     `json:"quantity"`

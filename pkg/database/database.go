@@ -41,7 +41,9 @@ func Connect(c *Config) {
 		&models.UserBalance{},
 		&models.Product{},
 		&models.Category{},
-		// &models.UserCart{},
+		&models.UserCart{},
+		&models.Order{},
+		&models.ShippingAddress{},
 	)
 
 	if err != nil {
