@@ -53,26 +53,27 @@ func CreateChart(c *fiber.Ctx) error {
 
 // Get Cart
 func GetCart(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.UserToken)
+
 	var carts []models.UserCart
 
-	err := database.DB.Find(&carts).Error
+	err := database.DB.Where("user_id = ?", user.UserID).Find(&carts).Error
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Cart is empty",
+		return c.Status(http.StatusNotFound).JSON(fiber.Map{
+			"message": "Cart not found",
 		})
 	}
 
-	// preloading product
 	// preloading product and category in product models
 	err = database.DB.Preload("Product").Preload("Product.Category").First(&carts).Error
 	if err != nil {
 		return c.Status(http.StatusNotFound).JSON(fiber.Map{
-			"message": "Cart is empty",
+			"message": "Cart not found",
 		})
 	}
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"carts": carts,
+		"cart": carts,
 	})
 }
 
