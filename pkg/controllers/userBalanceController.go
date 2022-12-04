@@ -20,17 +20,19 @@ func TopupBalance(c *fiber.Ctx) error {
 
 	user := c.Locals("user").(models.UserToken)
 
-	balance := models.UserBalance{
-		UserID:  user.UserID,
-		Balance: req.Balance,
-	}
+	balance := models.UserBalance{}
 
-	// balance.UserID = user.UserID
+	balance.UserID = user.UserID
 	balance.Balance = balance.Balance + req.Balance
 
+	err := database.DB.Where("user_id = ?", user.UserID).First(&balance).Error
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"message": "User not found",
+		})
+	}
 
-
-	err := database.DB.Save(&balance).Error
+	err = database.DB.Save(&balance).Error
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Internal server error",
