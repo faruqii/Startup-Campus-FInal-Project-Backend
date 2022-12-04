@@ -29,6 +29,7 @@ func TopupBalance(c *fiber.Ctx) error {
 		})
 	}
 
+	balance.UserID = user.UserID
 	balance.Balance = balance.Balance + req.Balance
 
 	err = database.DB.Save(&balance).Error
