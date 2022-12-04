@@ -13,6 +13,7 @@ func Setup(app *fiber.App) {
 	// ================== User ==================
 	// User
 	user := api.Group("/user")
+	user.Get(" ", controllers.UserDetail)
 	user.Post("/signup", controllers.SignUp)
 	user.Post("/signin", controllers.SignIn)
 	user.Post("/logout", controllers.SignOut)

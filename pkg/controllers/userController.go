@@ -156,3 +156,20 @@ func SignOut(c *fiber.Ctx) error {
 		"message": "Success logout",
 	})
 }
+
+// user detail
+func UserDetail(c *fiber.Ctx) error {
+	user := c.Locals("user").(models.UserToken)
+
+	var userDetail models.User
+
+	err := database.DB.Where("id = ?", user.UserID).First(&userDetail).Error
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(err.Error())
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"data": userDetail,
+	})
+}
