@@ -170,6 +170,7 @@ func UserDetail(c *fiber.Ctx) error {
 	}
 
 	userResponse := models.UserDetail{
+		ID:    userDetail.ID,
 		Name:  userDetail.Name,
 		Email: userDetail.Email,
 		Phone: userDetail.Phone,
