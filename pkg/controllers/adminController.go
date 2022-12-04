@@ -55,9 +55,36 @@ func GetOrders(c *fiber.Ctx) error {
 	query.Offset((page - 1) * pageSize).Limit(pageSize).Find(&orders)
 	database.DB.Model(&models.Order{}).Count(&total)
 
+	for _, order := range orders {
+		ordersResponse := models.OrderResponse{
+			ID:        order.ID,
+			UserName:  order.User.Name,
+			CreatedAt: order.CreatedAt,
+			UserID:    order.User.ID,
+			UserEmail: order.User.Email,
+			Total:     order.TotalPrice,
+		}
+
+		return c.Status(http.StatusOK).JSON(fiber.Map{
+			"status":  "success",
+			"message": "Get Orders Success",
+			"data":    ordersResponse,
+			"total":   total,
+		})
+	}
+
+	ordersResponse := models.OrderResponse{
+		ID:        orders[0].ID,
+		UserName:  orders[0].User.Name,
+		CreatedAt: orders[0].CreatedAt,
+		UserID:    orders[0].User.ID,
+		UserEmail: orders[0].User.Email,
+		Total:     orders[0].TotalPrice,
+	}
+
 	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"message": "Get orders success",
-		"data":    orders,
+		"message": "Get Orders Success",
+		"data":    ordersResponse,
 		"total":   total,
 	})
 }
