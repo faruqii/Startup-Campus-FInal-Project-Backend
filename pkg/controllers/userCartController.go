@@ -32,7 +32,7 @@ func CreateChart(c *fiber.Ctx) error {
 
 	// add to cart
 	cart := models.UserCart{
-		UserID:    user.ID,
+		UserID:    user.UserID,
 		ProductID: req.ProductID,
 		Quantity:  req.Quantity,
 		Sizes:     req.Sizes,
