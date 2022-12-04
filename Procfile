@@ -1,1 +1,1 @@
-web: SC_BE_FINPRO
+web: scbackendfinalproject
