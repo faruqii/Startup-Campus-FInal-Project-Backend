@@ -13,10 +13,18 @@ func Setup(app *fiber.App) {
 	// ================== User ==================
 	// User
 	user := api.Group("/user")
-	user.Get("/", controllers.UserDetail)
 	user.Post("/signup", controllers.SignUp)
 	user.Post("/signin", controllers.SignIn)
 	user.Post("/logout", controllers.SignOut)
+
+	userDetail := api.Group("/user/").Use(middleware.New(middleware.Config{
+		Unauthorized: func(c *fiber.Ctx) error {
+			return c.Status(401).JSON(fiber.Map{
+				"message": "Unauthorized",
+			})
+		},
+	}))
+	userDetail.Get("", controllers.UserDetail)
 
 	// User Address
 	userAddress := user.Group("/shipping_address").Use(middleware.New(middleware.Config{
