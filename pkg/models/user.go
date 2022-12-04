@@ -38,6 +38,13 @@ type LoginResponse struct {
 	Type  string `json:"type"`
 }
 
+type UserDetail struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Phone string `json:"phone"`
+}
+
 type Type struct {
 	ID   string `json:"id" gorm:"primaryKey, type:uid, default:uuid_generate_v4()"`
 	Name string `json:"name" gorm:"unique"`

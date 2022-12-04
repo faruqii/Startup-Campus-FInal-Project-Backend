@@ -169,7 +169,13 @@ func UserDetail(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(err.Error())
 	}
 
+	userResponse := models.UserDetail{
+		Name:  userDetail.Name,
+		Email: userDetail.Email,
+		Phone: userDetail.Phone,
+	}
+
 	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"data": userDetail,
+		"data": userResponse,
 	})
 }
