@@ -1,23 +1,21 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/database"
 	"github.com/faruqii/Startup-Campus-Final-Project-Backend/pkg/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/joho/godotenv"
 )
 
 func main() {
 	// Load .env file
-	err := godotenv.Load(".env")
+	// err := godotenv.Load(".env")
 
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 
 	config := &database.Config{
 		Host:     os.Getenv("DB_HOST"),
@@ -40,7 +38,7 @@ func main() {
 	}))
 
 	routes.Setup(app)
-	err = app.Listen(":" + os.Getenv("APP_PORT"))
+	err := app.Listen(":" + os.Getenv("APP_PORT"))
 
 	if err != nil {
 		panic(err)
